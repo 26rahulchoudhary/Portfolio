@@ -4,8 +4,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: false,
   images: {
     remotePatterns: [
-      { protocol: 'https', hostname: 'cdn-images-1.medium.com' },
-      { protocol: 'https', hostname: 'medium.com' },
+      { protocol: 'https', hostname: 'cdn.simpleicons.org' },
       { protocol: 'https', hostname: 'opengraph.github.com' },
     ],
   },

@@ -1,26 +1,20 @@
 'use client';
 
-import { useState, useEffect, type JSX, lazy, Suspense, useRef } from "react";
+import { useRef, type JSX } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import {
-  Github,
   Linkedin,
   MapPin,
   Terminal,
   Briefcase,
-  Sparkles,
   BookOpen,
   Globe,
-  ChevronDown,
-  Mail,
 } from "lucide-react";
 
 import { PORTFOLIO_CONTENT } from "@/constants/portfolio";
-import type { Contribution } from "@/constants/portfolio";
 import BentoCard from "@/Components/BentoCard";
 import ProjectCard from "@/Components/ProjectCard";
-import ContributionItem from "@/Components/ContributionItem";
 import LiveClock from "@/Components/LiveClock";
 import Hero from "@/Components/Hero";
 import { Tooltip } from "@/Components/ui/tooltip-card";
@@ -35,22 +29,9 @@ import FastAPI from "@/Components/FastAPI";
 // Animated icons
 import { GithubIcon, type GithubIconHandle } from "@/Components/ui/github";
 import { LinkedinIcon, type LinkedinIconHandle } from "@/Components/ui/linkedin";
-import { TwitterIcon, type TwitterIconHandle } from "@/Components/ui/twitter";
 import { SendIcon, type SendIconHandle } from "@/Components/ui/send";
-import type { MediumPost } from "@/lib/medium";
-import BlogCard from "@/Components/BlogCard";
-import GitHubCalendarComponent from "@/Components/GitHubCalendarComponent";
 import { MapPinIcon, type MapPinIconHandle } from "@/Components/ui/map-pin";
 
-// Lazy load heavy below-the-fold components
-const Oneko = lazy(() => import("@/Components/Oneko"));
-
-type GroupedContribution = {
-  repoName: string;
-  owner: string;
-  contributions: Contribution[];
-  prCount: number;
-};
 
 type TechLogo = {
   src: string;
@@ -78,50 +59,28 @@ const TECH_STACK_LOGOS: Record<string, TechLogo> = {
   MongoDB: { src: "https://cdn.simpleicons.org/mongodb", alt: "MongoDB logo" },
   "Claude Code": { src: "https://cdn.simpleicons.org/claude", alt: "Anthropic logo" },
   Codex: { src: "https://cdn.simpleicons.org/openai", alt: "OpenAI logo" },
-};
-
-const groupContributionsByRepo = (
-  contributions: Contribution[]
-): GroupedContribution[] => {
-  const grouped: { [key: string]: GroupedContribution } = {};
-
-  contributions.forEach((contribution) => {
-    try {
-      const urlObj = new URL(contribution.prUrl);
-      const parts = urlObj.pathname.split("/");
-      const owner = parts[1];
-      const repoName = parts[2];
-      const fullRepoName = `${owner}/${repoName}`;
-
-      if (!grouped[fullRepoName]) {
-        grouped[fullRepoName] = {
-          repoName: fullRepoName,
-          owner: owner,
-          contributions: [],
-          prCount: 0,
-        };
-      }
-      grouped[fullRepoName].contributions.push(contribution);
-      grouped[fullRepoName].prCount++;
-    } catch (error) {
-      console.error("Invalid prUrl in contribution:", contribution.prUrl, error);
-    }
-  });
-
-  return Object.values(grouped);
+  SQL: { src: "https://cdn.simpleicons.org/postgresql", alt: "SQL logo" },
+  C: { src: "https://cdn.simpleicons.org/c", alt: "C logo" },
+  Pandas: { src: "https://cdn.simpleicons.org/pandas", alt: "Pandas logo" },
+  NumPy: { src: "https://cdn.simpleicons.org/numpy", alt: "NumPy logo" },
+  "Scikit-learn": { src: "https://cdn.simpleicons.org/scikitlearn", alt: "Scikit-learn logo" },
+  "OpenAI API (GPT-4o)": { src: "https://cdn.simpleicons.org/openai", alt: "OpenAI logo" },
+  pgvector: { src: "https://cdn.simpleicons.org/postgresql", alt: "pgvector logo" },
+  Git: { src: "https://cdn.simpleicons.org/git", alt: "Git logo" },
+  Selenium: { src: "https://cdn.simpleicons.org/selenium", alt: "Selenium logo" },
+  Playwright: { src: "https://cdn.simpleicons.org/playwright", alt: "Playwright logo" },
+  Linux: { src: "https://cdn.simpleicons.org/linux", alt: "Linux logo" },
 };
 
 // Socials Card Component with animated icons
 function SocialsCard({ colSpan, rowSpan }: { colSpan?: string; rowSpan?: string }) {
   const githubRef = useRef<GithubIconHandle>(null);
   const linkedinRef = useRef<LinkedinIconHandle>(null);
-  const twitterRef = useRef<TwitterIconHandle>(null);
   const emailRef = useRef<SendIconHandle>(null);
 
   const iconRefs = {
     "GitHub": githubRef,
     "LinkedIn": linkedinRef,
-    "Twitter": twitterRef,
     "Email": emailRef,
   };
 
@@ -143,8 +102,6 @@ function SocialsCard({ colSpan, rowSpan }: { colSpan?: string; rowSpan?: string 
         return <GithubIcon ref={githubRef} size={20} className={className} />;
       case "LinkedIn":
         return <LinkedinIcon ref={linkedinRef} size={20} className={className} />;
-      case "Twitter":
-        return <TwitterIcon ref={twitterRef} size={20} className={className} />;
       case "Email":
         return <SendIcon ref={emailRef} size={20} className={className} />;
       default:
@@ -217,39 +174,9 @@ function LocationCard({ colSpan, rowSpan }: { colSpan?: string; rowSpan?: string
 }
 
 export default function Home() {
-  const [blogs, setBlogs] = useState<MediumPost[]>([]);
-  const [loadingBlogs, setLoadingBlogs] = useState(true);
   const heroSendRef = useRef<SendIconHandle>(null);
 
   const currentRole = PORTFOLIO_CONTENT.experience[0];
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    fetch(`/api/medium?url=${encodeURIComponent(PORTFOLIO_CONTENT.mediumUrl)}`, {
-      signal: controller.signal,
-    })
-      .then(async (response) => {
-        if (!response.ok) {
-          throw new Error(`Failed to fetch Medium posts: ${response.status}`);
-        }
-        return response.json() as Promise<{ posts?: MediumPost[] }>;
-      })
-      .then((data) => {
-        setBlogs(Array.isArray(data.posts) ? data.posts : []);
-      })
-      .catch((error) => {
-        if ((error as Error).name === "AbortError") return;
-        console.error("Failed to fetch Medium posts:", error);
-      })
-      .finally(() => {
-        setLoadingBlogs(false);
-      });
-
-    return () => {
-      controller.abort();
-    };
-  }, []);
 
   const startDate = new Date(currentRole.startDate);
   const now = new Date();
@@ -260,26 +187,6 @@ export default function Home() {
   if (now.getDate() >= startDate.getDate()) months++;
 
   const displayMonths = months < 1 ? 1 : months;
-  const expDuration = `${displayMonths} month${displayMonths > 1 ? "s" : ""}`;
-
-  const groupedContributions = groupContributionsByRepo(
-    PORTFOLIO_CONTENT.contributions
-  );
-
-  const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(
-    new Set(groupedContributions.map(group => group.repoName))
-  );
-  const toggleCollapse = (repoName: string) => {
-    setCollapsedGroups((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(repoName)) {
-        newSet.delete(repoName);
-      } else {
-        newSet.add(repoName);
-      }
-      return newSet;
-    });
-  };
 
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 text-neutral-800 dark:text-neutral-200 font-sans selection:bg-blue-600 selection:text-white dark:selection:bg-blue-300 dark:selection:text-neutral-900 transition-colors duration-300">
@@ -370,7 +277,7 @@ export default function Home() {
             </div>
 
             {/* Actions */}
-            <div className="flex flex-wrap gap-3 pt-4 md:pt-6 w-full mt-auto">
+            <div className="flex flex-wrap gap-3 pt-4 md:pt-2 w-full mt-auto">
               <a
                 href={`https://mail.google.com/mail/?view=cm&fs=1&to=${PORTFOLIO_CONTENT.personal.email}`}
                 target="_blank"
@@ -577,110 +484,10 @@ export default function Home() {
           </div>
         </div>
 
-        {/* === GITHUB CALENDAR SECTION === */}
-        <div className="cv-auto">
-          <GitHubCalendarComponent />
-        </div>
-
-        {/* === OPEN SOURCE SECTION (Outside the fixed-row grid to fix overflow) === */}
-        <div className="mt-16 w-full cv-auto">
-          <div className="mb-6 px-4 md:px-6">
-            <div className="flex items-center gap-3">
-              <Github className="text-purple-500" size={24} />
-              <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Open Source Contributions</h2>
-            </div>
-            <p className="text-neutral-600 dark:text-neutral-500 text-sm mt-1 pb-15">Building and giving back to the community.</p>
-          </div>
-
-          <div className="flex flex-col mb-12 sm:mx-6 md:mx-12 lg:mx-20 bg-white/40 dark:bg-neutral-900/40 rounded-3xl border border-neutral-200 dark:border-white/5 overflow-hidden">
-            {groupedContributions.map((group) => {
-              const isCollapsed = collapsedGroups.has(group.repoName);
-              return (
-                <div key={group.repoName} className="border-b border-neutral-200 dark:border-white/5 last:border-b-0">
-                  <button
-                    className="flex items-center border-b border-neutral-200 dark:border-white/10 justify-between w-full p-4 bg-neutral-100/50 dark:bg-neutral-800/50 hover:bg-neutral-200/70 dark:hover:bg-neutral-800/70 transition-colors cursor-pointer"
-                    onClick={() => toggleCollapse(group.repoName)}
-                    aria-expanded={!isCollapsed}
-                    aria-controls={`contributions-for-${group.repoName}`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <Image
-                        src={`https://github.com/${group.owner}.png`}
-                        alt={group.owner}
-                        className="w-6 h-6 rounded-full"
-                        width={24}
-                        height={24}
-                        unoptimized
-                      />
-                      <h3 className="text-lg font-bold text-neutral-900 dark:text-white">{group.repoName}</h3>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <p className="text-neutral-600 dark:text-neutral-500 text-sm">{group.prCount} PRs</p>
-                    <ChevronDown size={20} className={`text-neutral-400 dark:text-neutral-400 transition-transform duration-300 ${isCollapsed ? 'rotate-0' : 'rotate-180'}`} />
-                    </div>
-                  </button>
-                  <div
-                    id={`contributions-for-${group.repoName}`}
-                    className={`overflow-hidden transition-all duration-300 ease-in-out ${isCollapsed ? 'max-h-0 opacity-0' : 'max-h-[1000px] opacity-100'}`}
-                  >
-                    {!isCollapsed && group.contributions.map((contribution, index) => (
-                      <ContributionItem key={index} contribution={contribution} />
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* === BLOG SECTION === */}
-        <div className="mt-20 w-full mb-20 cv-auto">
-          <div className="mb-8 px-4 md:px-6">
-            <div className="flex items-center gap-3">
-              <BookOpen className="text-emerald-500" size={24} />
-              <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Latest Writings</h2>
-            </div>
-            <p className="text-neutral-600 dark:text-neutral-500 text-sm mt-1">Thought-provoking articles on technology and development.</p>
-          </div>
-
-          {loadingBlogs ? (
-            <div className="flex justify-center py-10">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
-            </div>
-          ) : blogs.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {blogs.map((post, idx) => (
-                <motion.div
-                  key={post.guid}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 * idx }}
-                >
-                  <BlogCard post={post} />
-                </motion.div>
-              ))}
-            </div>
-          ) : (
-            <div className="mx-4 md:mx-6 rounded-2xl border border-neutral-200 dark:border-white/10 bg-white/70 dark:bg-neutral-900/50 p-5 flex flex-col gap-2">
-              <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                Unable to load Medium posts right now.
-              </p>
-              <a
-                href={PORTFOLIO_CONTENT.mediumUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-emerald-600 dark:text-emerald-400 hover:underline w-fit"
-              >
-                Read on Medium
-              </a>
-            </div>
-          )}
-        </div>
-
         {/* Footer */}
         <div className="mt-20 border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-neutral-500 text-sm">
-            © {new Date().getFullYear()} Paras. All Rights Reserved.
+            © {new Date().getFullYear()} Rahul. All Rights Reserved.
           </p>
           <div className="flex gap-6 text-sm font-medium text-neutral-400">
             {PORTFOLIO_CONTENT.socials
@@ -693,9 +500,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <Suspense fallback={null}>
-        <Oneko />
-      </Suspense>
     </div>
   );
 }

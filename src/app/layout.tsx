@@ -9,21 +9,21 @@ const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Paras Verma — Fullstack Developer',
-  description: 'I build production-ready web and AI applications using TypeScript, React, Next.js, Node.js, FastAPI — focused on clean UX and real user impact.',
+  title: 'Rahul Choudhary — AI Engineer',
+  description: 'AI Engineer focused on building intelligent systems powered by LLMs, RAG pipelines, and scalable backend architectures. Passionate about creating production-ready AI applications using modern technologies.',
   icons: {
     icon: '/Favicon.png',
   },
   openGraph: {
-    title: 'Paras Verma — Fullstack Developer',
-    description: 'I build production-ready web and AI applications using TypeScript, React, Next.js, Node.js, FastAPI — focused on clean UX and real user impact.',
+    title: 'Rahul Choudhary — AI Engineer',
+    description: 'AI Engineer focused on building intelligent systems powered by LLMs, RAG pipelines, and scalable backend architectures. Passionate about creating production-ready AI applications using modern technologies.',
     images: ['/image.png'],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Paras Verma — Fullstack Developer',
-    description: 'I build production-ready web and AI applications using TypeScript, React, Next.js, Node.js, FastAPI — focused on clean UX and real user impact.',
+    title: 'Rahul Choudhary — AI Engineer',
+    description: 'AI Engineer focused on building intelligent systems powered by LLMs, RAG pipelines, and scalable backend architectures. Passionate about creating production-ready AI applications using modern technologies.',
     images: ['/image.png'],
   },
 };
