@@ -163,7 +163,7 @@ export const PORTFOLIO_CONTENT: {
       desc: "Production-ready RAG-based AI agent answering queries from 100+ shareholder letters using LangChain, FastAPI, and GPT-4o with sub-second latency and 35% improved multi-turn response relevance.",
       tags: ["LangChain", "FastAPI", "pgvector", "GPT-4o", "TypeScript", "Node.js"],
       href: "#",
-      github: "#",
+      github: "https://github.com/26rahulchoudhary/Pazago",
       className: "md:col-span-1",
     },
     {
@@ -171,7 +171,7 @@ export const PORTFOLIO_CONTENT: {
       desc: "Full-stack RAG platform for semantic analysis of 50K+ financial documents with embedding-based search, RBAC, PDF parsing, and React frontend for interactive document management.",
       tags: ["FastAPI", "PostgreSQL", "pgvector", "React", "RAG", "Semantic Search"],
       href: "#",
-      github: "#",
+      github: "https://github.com/26rahulchoudhary/Nimap_task",
       className: "md:col-span-1",
     },
   ],
