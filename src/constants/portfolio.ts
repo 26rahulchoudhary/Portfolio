@@ -73,10 +73,10 @@ export const PORTFOLIO_CONTENT: {
   personal: {
     name: "Hi, I'm Rahul —",
     surname: "AI Engineer.",
-    roles: ["AI Engineer.", "Full-Stack Developer.", "Software Engineer."],
+    roles: ["AI Engineer.", "Backend Developer.", "Software Engineer."],
     location: "India",
     timezone: "Asia/Kolkata",
-    bio: `AI Engineer focused on building intelligent systems powered by LLMs, RAG pipelines, and scalable backend architectures. I build with TypeScript, React, FastAPI, and Node.js — passionate about creating production-ready AI applications with modern technologies.`,
+    bio: 'AI Engineer building end-to-end intelligent applications — RAG pipelines, LLM-powered backends with Python & FastAPI, and React UIs that bring it all together.',
     email: "rahulchoudhary5266@gmail.com",
     availability: "Available for opportunities",
     avatar: "/profile.png",
@@ -97,31 +97,27 @@ export const PORTFOLIO_CONTENT: {
   skillCategories: [
     {
       label: "Languages",
-      skills: ["Python", "SQL", "JavaScript", "TypeScript", "C"],
+      skills: ["Python", "SQL", "JavaScript", "TypeScript"],
     },
     {
       label: "Frameworks / Libraries",
-      skills: ["FastAPI", "LangChain", "React", "Node.js", "Pandas", "NumPy", "Scikit-learn"],
+      skills: ["FastAPI", "LangChain", "React", "Pandas", "NumPy", "Scikit-learn"],
     },
     {
-      label: "AI Technologies",
-      skills: ["RAG", "LLM Integration", "OpenAI API (GPT-4o)", "Prompt Engineering", "AI Agents", "NLP"],
-    },
-    {
-      label: "AI Concepts",
-      skills: ["Embeddings", "Vector Databases", "Semantic Search", "Reranking", "Chunking Strategies"],
+      label: "AI",
+      skills: ["RAG", "LLM Integration", "Prompt Engineering", "AI Agents", "NLP", "Embeddings", "Vector Databases", "Semantic Search", "Reranking", "Chunking Strategies"],
     },
     {
       label: "Databases",
       skills: ["PostgreSQL", "pgvector"],
     },
-    {
-      label: "Evaluation & Optimization",
-      skills: ["RAGAS", "LLM Evaluation", "Conversation Memory", "Metadata Filtering"],
-    },
+//     {
+//       label: "Evaluation & Optimization",
+//       skills: ["RAGAS", "LLM Evaluation", "Conversation Memory", "Metadata Filtering"],
+//     },
     {
       label: "Tools & Platforms",
-      skills: ["Docker", "Git", "GitHub", "Selenium", "Playwright", "Linux", "Async/Await"],
+      skills: ["Docker", "Git", "GitHub", "Selenium", "Playwright"],
     },
   ],
   experience: [

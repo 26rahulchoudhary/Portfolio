@@ -19,6 +19,8 @@ import LiveClock from "@/Components/LiveClock";
 import Hero from "@/Components/Hero";
 import { Tooltip } from "@/Components/ui/tooltip-card";
 
+import PythonIcon from "@/Components/Python";
+import JavaScriptIcon from "@/Components/JavaScript";
 import TypeScript from "@/Components/Typescript";
 import NextJs from "@/Components/NextJS";
 import NodeJs from "@/Components/NodeJs";
@@ -67,9 +69,16 @@ const TECH_STACK_LOGOS: Record<string, TechLogo> = {
   "OpenAI API (GPT-4o)": { src: "https://cdn.simpleicons.org/openai", alt: "OpenAI logo" },
   pgvector: { src: "https://cdn.simpleicons.org/postgresql", alt: "pgvector logo" },
   Git: { src: "https://cdn.simpleicons.org/git", alt: "Git logo" },
+  GitHub: { src: "https://cdn.simpleicons.org/github", alt: "GitHub logo" },
   Selenium: { src: "https://cdn.simpleicons.org/selenium", alt: "Selenium logo" },
-  Playwright: { src: "https://cdn.simpleicons.org/playwright", alt: "Playwright logo" },
+//   Playwright: { src: "https://cdn.simpleicons.org/playwright", alt: "Playwright logo" },
   Linux: { src: "https://cdn.simpleicons.org/linux", alt: "Linux logo" },
+//   RAG: { src: "https://cdn.simpleicons.org/", alt: "RAG logo" },
+//   "LLM Integration": { src: "https://cdn.simpleicons.org/openai", alt: "LLM Integration logo" },
+  LLM: { src: "https://cdn.simpleicons.org/openai", alt: "LLM logo" },
+  NLP: { src: "https://cdn.simpleicons.org/python", alt: "NLP logo" },
+  "Vector Databases": { src: "https://cdn.simpleicons.org/qdrant", alt: "Vector Databases logo" },
+  "Vector DB": { src: "https://cdn.simpleicons.org/qdrant", alt: "Vector DB logo" },
 };
 
 // Socials Card Component with animated icons
@@ -222,7 +231,7 @@ export default function Home() {
                     About me.
                   </h2>
                  <div className="text-neutral-700 dark:text-neutral-300 text-[15px] md:text-[17px] leading-loose w-full max-w-none">
-                   {PORTFOLIO_CONTENT.personal.bio.split(/(TypeScript|React|Next\.js|Node\.js|PostgreSQL|LLM APIs|RAG|FastAPI|AI|web)/g).map((part, i) => {
+                   {PORTFOLIO_CONTENT.personal.bio.split(/(TypeScript|Python|JavaScript|React|Next\.js|Node\.js|PostgreSQL|LLM APIs|RAG|FastAPI|AI|web)/g).map((part, i) => {
                     const pillClass = "inline-flex items-center text-sm font-semibold bg-neutral-100 dark:bg-white/10 border border-neutral-200 dark:border-white/20 py-1 px-2.5 rounded-lg text-black dark:text-white align-baseline shadow-xs mx-0.5";
                     
                     const inlineMap: Record<string, JSX.Element> = {
@@ -230,6 +239,18 @@ export default function Home() {
                         <span key={`ts-${i}`} className={pillClass}>
                           <span className="w-4 h-4 mr-1.5"><TypeScript /></span>
                           <span>TypeScript</span>
+                        </span>
+                      ),
+                      Python: (
+                        <span key={`python-${i}`} className={pillClass}>
+                          <span className="w-4 h-4 mr-3.5"><PythonIcon /></span>
+                          <span>Python</span>
+                        </span>
+                      ),
+                      JavaScript: (
+                        <span key={`js-${i}`} className={pillClass}>
+                          <span className="w-4 h-4 mr-1.5"><JavaScriptIcon /></span>
+                          <span>JavaScript</span>
                         </span>
                       ),
                       React: (
