@@ -177,4 +177,5 @@ export const PORTFOLIO_CONTENT: {
       status:"merged"
     },
     ],
+    mediumUrl: "https://medium.com/@rahulchoudhary2610",
 };
