@@ -171,6 +171,10 @@ export const PORTFOLIO_CONTENT: {
       className: "md:col-span-1",
     },
   ],
-  contributions: [],
-  mediumUrl: "",
+  contributions: [
+      {
+      prUrl:"https://github.com/microsoft/playwright-python/pull/3078",
+      status:"merged"
+    },
+    ],
 };
